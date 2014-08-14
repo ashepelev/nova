@@ -51,6 +51,51 @@ class NovaBase(models.SoftDeleteMixin,
 
         super(NovaBase, self).save(session=session)
 
+"""
+Description of TopologyWeigher tables
+start
+"""
+
+class TrafficInfo(BASE, NovaBase):
+    """ Aggregates the information about traffic between nodes, """
+
+    __tablename__ = 'traffic_info'
+    __table_args__= ()
+    id = Column(Integer, primary_key=True,nullable=False)
+    src = Column(Integer) # id of the node
+    dst = Column(Integer) # id of the node
+    bytes = Column(Integer)
+    m_id = Column(Integer)
+
+class PingInfo(BASE, NovaBase):
+    """ Aggregates the information about latency between nodes, """
+
+    __tablename__ = 'ping_info'
+    __table_args__= ()
+    id = Column(Integer, primary_key=True,nullable=False)
+    src = Column(Integer) # id of the node
+    dst = Column(Integer) # id of the node
+    latency = Column(Float)
+
+class NodeInfo(BASE,NovaBase):
+    __tablename__ = 'node_info'
+    __tableargs__ = ()
+    id = Column(Integer, primary_key=True, nullable=False)
+    node_id = Column(Integer)
+    name = Column(String)
+    ip_addr = Column(String)
+    hostname = Column(String)
+
+class EdgeInfo(BASE,NovaBase):
+    __tablename__ = 'edge_info'
+    __tableargs__ = ()
+    id = Column(Integer, primary_key=True, nullable=False)
+    start = Column(Integer)
+    end = Column(Integer)
+
+"""
+end
+"""
 
 class Service(BASE, NovaBase):
     """Represents a running service on a host."""

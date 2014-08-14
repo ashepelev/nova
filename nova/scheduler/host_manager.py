@@ -34,6 +34,8 @@ from nova.pci import pci_request
 from nova.pci import pci_stats
 from nova.scheduler import filters
 from nova.scheduler import weights
+from nova.scheduler.weights.TopologyWeigher import utils as topoutils
+from nova import context
 
 host_manager_opts = [
     cfg.MultiStrOpt('scheduler_available_filters',
@@ -58,6 +60,10 @@ host_manager_opts = [
     cfg.ListOpt('scheduler_weight_classes',
                 default=['nova.scheduler.weights.all_weighers'],
                 help='Which weight class names to use for weighing hosts'),
+    cfg.StrOpt('topology_description_path',
+               default=None,
+               help='Full path to directory with describing of the topology.'
+                    'The directory should have nodes.yaml and edges.yaml files.')
     ]
 
 CONF = cfg.CONF
@@ -272,6 +278,17 @@ class HostManager(object):
         self.weight_handler = weights.HostWeightHandler()
         self.weight_classes = self.weight_handler.get_matching_classes(
                 CONF.scheduler_weight_classes)
+        self.check_and_set_topology()
+
+    def check_and_set_topology(self):
+        ctxt = context.get_admin_context()
+        if not topoutils.only_check_db(ctxt):
+            topology_path = CONF.topology_description_path
+            if topology_path is None:
+                LOG.debug("topology_description_path doesn't set in nova.conf. Continue...")
+            else:
+                topoutils.only_load_db(ctxt,topology_path)
+                LOG.debug("Topology loaded to database")
 
     def _choose_host_filters(self, filter_cls_names):
         """Since the caller may specify which filters to use we need

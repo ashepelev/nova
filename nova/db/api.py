@@ -127,6 +127,51 @@ def not_equal(*values):
 
 ###################
 
+"""
+TopologyWeigher references to the db calls
+start
+"""
+
+def traffic_get(context):
+    return IMPL.traffic_get(context)
+
+def traffic_get_avg(context,time):
+    return IMPL.traffic_get_avg(context,time)
+
+def traffic_add(context,values):
+    return IMPL.traffic_add(context,values)
+
+def ping_get(context):
+    return IMPL.ping_get(context)
+
+def ping_get_avg(context,time):
+    return IMPL.ping_get_avg(context,time)
+
+def ping_add(context,values):
+    return IMPL.ping_add(context,values)
+
+def node_add(context,values):
+    return IMPL.node_add(context,values)
+
+def edge_add(context,values):
+    return IMPL.edge_add(context,values)
+
+def node_get(context):
+    return IMPL.node_get(context)
+
+def edge_get(context):
+    return IMPL.edge_get(context)
+
+def check_node(context):
+    return IMPL.check_node(context)
+
+def check_edge(context):
+    return IMPL.check_edge(context)
+
+"""
+end
+"""
+
 
 def service_destroy(context, service_id):
     """Destroy the service or raise if it does not exist."""

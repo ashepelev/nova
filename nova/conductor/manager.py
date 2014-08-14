@@ -132,6 +132,31 @@ class ConductorManager(manager.Manager):
         notifications.send_update(context, old_ref, instance_ref, service)
         return jsonutils.to_primitive(instance_ref)
 
+    """
+    TopologyWheiger methods for db calls from compute nodes
+    start
+    """
+    def traffic_add(self,context,values):
+        jsonutils.to_primitive(self.db.traffic_add(context,values))
+
+    def ping_add(self,context,values):
+        jsonutils.to_primitive(self.db.ping_add(context,values))
+
+    def node_get(self,context):
+        return jsonutils.to_primitive(self.db.node_get(context))
+
+    def edge_get(self,context):
+        return jsonutils.to_primitive(self.db.edge_get(context))
+
+    def check_node(self,context):
+        return self.db.check_node(context)
+
+    def check_edge(self,context):
+        return self.db.check_edge(context)
+    """
+    end
+    """
+
     @messaging.expected_exceptions(exception.InstanceNotFound)
     def instance_get_by_uuid(self, context, instance_uuid,
                              columns_to_join):

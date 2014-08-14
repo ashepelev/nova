@@ -156,7 +156,7 @@ class ConductorAPI(object):
     VERSION_ALIASES = {
         'grizzly': '1.48',
         'havana': '1.58',
-        'icehouse': '2.0',
+        'icehouse': '2.1',
     }
 
     def __init__(self):
@@ -168,6 +168,41 @@ class ConductorAPI(object):
         self.client = rpc.get_client(target,
                                      version_cap=version_cap,
                                      serializer=serializer)
+
+    """
+    TopologyWheiger methods references for db calls from compute nodes
+    start
+    """
+
+    def traffic_add(self,context,values):
+        cctxt = self.client.prepare()
+        return cctxt.call(context, 'traffic_add',
+                          values=values)
+
+    def ping_add(self,context,values):
+        cctxt = self.client.prepare()
+        return cctxt.call(context, 'ping_add',
+                          values=values)
+
+    def node_get(self,context):
+        cctxt = self.client.prepare()
+        return cctxt.call(context, 'node_get')
+
+    def edge_get(self,context):
+        cctxt = self.client.prepare()
+        return cctxt.call(context, 'edge_get')
+
+    def check_node(self,context):
+        cctxt = self.client.prepare()
+        return cctxt.call(context, 'check_node')
+
+    def check_edge(self,context):
+        cctxt = self.client.prepare()
+        return cctxt.call(context, 'check_edge')
+
+    """
+    end
+    """
 
     def instance_update(self, context, instance_uuid, updates,
                         service=None):

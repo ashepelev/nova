@@ -693,7 +693,7 @@ class API(base.Base):
                                          requested_networks, config_drive,
                                          block_device_mapping,
                                          auto_disk_config, reservation_id,
-                                         max_count):
+                                         max_count,topology_priority):
         """Verify all the input parameters regardless of the provisioning
         strategy being performed.
         """
@@ -777,7 +777,8 @@ class API(base.Base):
             'availability_zone': availability_zone,
             'root_device_name': root_device_name,
             'progress': 0,
-            'system_metadata': system_metadata}
+            'system_metadata': system_metadata,
+            'topology_priority': topology_priority}
 
         options_from_image = self._inherit_properties_from_image(
                 boot_meta, auto_disk_config)
@@ -924,7 +925,8 @@ class API(base.Base):
                requested_networks, config_drive,
                block_device_mapping, auto_disk_config,
                reservation_id=None, scheduler_hints=None,
-               legacy_bdm=True, shutdown_terminate=False):
+               legacy_bdm=True, shutdown_terminate=False,
+               topology_priority=None):
         """Verify all the input parameters regardless of the provisioning
         strategy being performed and schedule the instance(s) for
         creation.
@@ -964,7 +966,7 @@ class API(base.Base):
                 forced_host, user_data, metadata, injected_files, access_ip_v4,
                 access_ip_v6, requested_networks, config_drive,
                 block_device_mapping, auto_disk_config, reservation_id,
-                max_count)
+                max_count,topology_priority)
 
         # max_net_count is the maximum number of instances requested by the
         # user adjusted for any network quota constraints, including
@@ -988,7 +990,8 @@ class API(base.Base):
 
         filter_properties = self._build_filter_properties(context,
                 scheduler_hints, forced_host, forced_node, instance_type)
-
+        if topology_priority is not None:
+            filter_properties['instance_type']['topology_priority'] = topology_priority
         self._update_instance_group(context, instances, scheduler_hints)
 
         for instance in instances:
@@ -1310,7 +1313,7 @@ class API(base.Base):
                block_device_mapping=None, access_ip_v4=None,
                access_ip_v6=None, requested_networks=None, config_drive=None,
                auto_disk_config=None, scheduler_hints=None, legacy_bdm=True,
-               shutdown_terminate=False):
+               shutdown_terminate=False, topology_priority=None):
         """Provision instances, sending instance information to the
         scheduler.  The scheduler will determine where the instance(s)
         go and will handle creating the DB entries.
@@ -1340,7 +1343,8 @@ class API(base.Base):
                                block_device_mapping, auto_disk_config,
                                scheduler_hints=scheduler_hints,
                                legacy_bdm=legacy_bdm,
-                               shutdown_terminate=shutdown_terminate)
+                               shutdown_terminate=shutdown_terminate,
+                               topology_priority=topology_priority)
 
     def trigger_provider_fw_rules_refresh(self, context):
         """Called when a rule is added/removed from a provider firewall."""

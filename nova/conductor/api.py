@@ -61,6 +61,32 @@ class LocalAPI(object):
         # nothing to wait for in the local case.
         pass
 
+    """
+    TopologyWheiger methods references for db calls from compute nodes
+    start
+    """
+    def traffic_add(self,context,values):
+        return self._manager.traffic_add(context,values)
+
+    def ping_add(self,context,values):
+        return self._manager.ping_add(context,values)
+
+    def node_get(self,context):
+        return self._manager.node_get(context)
+
+    def edge_get(self,context):
+        return self._manager.edge_get(context)
+
+    def check_node(self,context):
+        return self._manager.check_node(context)
+
+    def check_edge(self,context):
+        return self._manager.check_edge(context)
+
+    """
+    end
+    """
+
     def instance_update(self, context, instance_uuid, **updates):
         """Perform an instance update in the database."""
         return self._manager.instance_update(context, instance_uuid,

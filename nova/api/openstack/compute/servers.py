@@ -925,6 +925,9 @@ class Controller(wsgi.Controller):
             auto_disk_config = server_dict.get('auto_disk_config')
 
         scheduler_hints = {}
+
+        topology_priority = server_dict.get('topology_priority',None)
+
         if self.ext_mgr.is_loaded('OS-SCH-HNT'):
             scheduler_hints = server_dict.get('scheduler_hints', {})
 
@@ -954,7 +957,8 @@ class Controller(wsgi.Controller):
                             block_device_mapping=block_device_mapping,
                             auto_disk_config=auto_disk_config,
                             scheduler_hints=scheduler_hints,
-                            legacy_bdm=legacy_bdm)
+                            legacy_bdm=legacy_bdm,
+                            topology_priority=topology_priority)
         except (exception.QuotaError,
                 exception.PortLimitExceeded) as error:
             raise exc.HTTPForbidden(
