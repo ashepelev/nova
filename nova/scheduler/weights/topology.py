@@ -62,7 +62,6 @@ class TopologyWeighedObject(weights.WeighedHost):
         weights = []
         for obj in weighed_obj_list:
             weights.append(scheduler_dict[node_by_hostname[obj.obj.host].id])
-        print weights
         return weights
 
 class TopologyWeigher(weights.BaseHostWeigher):
@@ -132,10 +131,3 @@ class TopologyWeigher(weights.BaseHostWeigher):
         weights = Scheduler.schedule(dist,task,self.node_list)
         # Transforming weigher result to the one accepted by nova.scheduler
         return TopologyWeighedObject.to_weight_list(weighed_obj_list,weights,node_list_by_hostname)
-
-
-
-
-
-
-
